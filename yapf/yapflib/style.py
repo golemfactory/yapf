@@ -150,6 +150,9 @@ _STYLE_HELP = dict(
             start_ts=now()-timedelta(days=3),
             end_ts=now(),
         )        # <--- this bracket is dedented and on a separate line"""),
+    GOLEM_INDENT=textwrap.dedent("""
+      Function call indenting from Golem coding standard
+    """),
     INDENT_CLOSING_BRACKETS=textwrap.dedent("""\
       Put closing brackets on a separate line, indented, if the bracketed
       expression can't fit in a single line. Applies to all kinds of brackets,
@@ -372,6 +375,7 @@ def CreatePEP8Style():
       CONTINUATION_ALIGN_STYLE='SPACE',
       CONTINUATION_INDENT_WIDTH=4,
       DEDENT_CLOSING_BRACKETS=False,
+      GOLEM_INDENT=False,
       INDENT_CLOSING_BRACKETS=False,
       DISABLE_ENDING_COMMA_HEURISTIC=False,
       EACH_DICT_ENTRY_ON_SEPARATE_LINE=True,
@@ -429,6 +433,7 @@ def CreateGoogleStyle():
   style['SPLIT_BEFORE_LOGICAL_OPERATOR'] = False
   style['SPLIT_COMPLEX_COMPREHENSION'] = True
   style['SPLIT_PENALTY_COMPREHENSION'] = 2100
+  style['GOLEM_INDENT'] = False
   return style
 
 
@@ -441,6 +446,14 @@ def CreateChromiumStyle():
   style['SPLIT_BEFORE_BITWISE_OPERATOR'] = True
   style['SPLIT_BEFORE_DOT'] = True
   style['SPLIT_BEFORE_EXPRESSION_AFTER_OPENING_PAREN'] = True
+  return style
+
+def CreateGolemStyle():
+  style = CreateGoogleStyle()
+  style['INDENT_WIDTH'] = 4
+  style['CONTINUATION_INDENT_WIDTH'] = 4
+  style['COLUMN_LIMIT'] = 80
+  style['GOLEM_INDENT'] = True
   return style
 
 
@@ -466,6 +479,7 @@ _STYLE_NAME_TO_FACTORY = dict(
     chromium=CreateChromiumStyle,
     google=CreateGoogleStyle,
     facebook=CreateFacebookStyle,
+    golem=CreateGolemStyle,
 )
 
 _DEFAULT_STYLE_TO_FACTORY = [
@@ -473,6 +487,7 @@ _DEFAULT_STYLE_TO_FACTORY = [
     (CreateFacebookStyle(), CreateFacebookStyle),
     (CreateGoogleStyle(), CreateGoogleStyle),
     (CreatePEP8Style(), CreatePEP8Style),
+    (CreateGolemStyle(), CreateGolemStyle),
 ]
 
 
@@ -551,6 +566,7 @@ _STYLE_OPTION_VALUE_CONVERTER = dict(
     CONTINUATION_ALIGN_STYLE=_ContinuationAlignStyleStringConverter,
     CONTINUATION_INDENT_WIDTH=int,
     DEDENT_CLOSING_BRACKETS=_BoolConverter,
+    GOLEM_INDENT=_BoolConverter,
     INDENT_CLOSING_BRACKETS=_BoolConverter,
     DISABLE_ENDING_COMMA_HEURISTIC=_BoolConverter,
     EACH_DICT_ENTRY_ON_SEPARATE_LINE=_BoolConverter,
